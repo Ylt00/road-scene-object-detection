@@ -71,9 +71,19 @@ Current prepared dataset:
 | Validation errors | 0 |
 
 Detailed class mapping and processing steps are documented in `docs/dataset.md`.
+## YOLOv8n Baseline
+
+| Metric | Value |
+|---|---:|
+| Precision | 0.655 |
+| Recall | 0.344 |
+| mAP50 | 0.343 |
+| mAP50-95 | 0.215 |
+
+Training and evaluation details are recorded in `docs/experiments/road-yolov8n-baseline.md`.
 ## Status
 
-Dataset preparation is implemented and verified. Model training, evaluation, visualization, and report generation will be added in later stages.
+The YOLOv8n baseline is trained and evaluated. Visualization, P2 comparison, and report generation will be added in later stages.
 
 ## Tech Stack
 

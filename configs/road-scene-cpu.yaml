@@ -1,7 +1,7 @@
 # YOLOv8n baseline for the curated road-scene dataset.
 model: yolov8n.pt
 data: data/processed/road-scene/data.yaml
-epochs: 20
+epochs: 10
 imgsz: 320
 batch: 8
 device: cpu
