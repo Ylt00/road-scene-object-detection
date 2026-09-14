@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "road-scene-object-detection"
+version = "0.1.0"
+description = "Multi-class road scene object detection with small-object analysis."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "杨丽彤" }]
+dependencies = [
+    "numpy>=1.26,<3",
+    "opencv-python>=4.8,<6",
+    "PyYAML>=6,<7",
+    "matplotlib>=3.8,<4",
+]
+
+[project.optional-dependencies]
+train = [
+    "ultralytics>=8.3,<9",
+]
+dev = []
+
+[project.scripts]
+road-scene = "road_scene.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

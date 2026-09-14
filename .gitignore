@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Test and lint tools
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Project data and generated results
+data/
+datasets/
+runs/
+outputs/
+weights/
+
+# Model files
+*.pt
+*.pth
+*.onnx
+*.engine
+*.torchscript
+
+# Secrets
+.env
+.env.*
+!.env.example
