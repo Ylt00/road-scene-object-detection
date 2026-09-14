@@ -1,5 +1,6 @@
 # YOLOv8n with P2 high-resolution detection head for small-object analysis.
 model: yolov8-p2.yaml
+pretrained_model: weights/yolov8n.pt
 data: data/processed/road-scene/data.yaml
 epochs: 10
 imgsz: 320

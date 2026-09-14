@@ -1,0 +1,26 @@
+{
+  "candidate": {
+    "metrics": {
+      "metrics/mAP50(B)": 0.009512607239593964,
+      "metrics/mAP50-95(B)": 0.0028974067470390655,
+      "metrics/precision(B)": 0.7464678306198961,
+      "metrics/recall(B)": 0.01020408163265306
+    },
+    "name": "YOLOv8n-P2"
+  },
+  "delta": {
+    "metrics/mAP50(B)": -0.3339620845847032,
+    "metrics/mAP50-95(B)": -0.21170979702530698,
+    "metrics/precision(B)": 0.09121237196039989,
+    "metrics/recall(B)": -0.33397860924632966
+  },
+  "reference": {
+    "metrics": {
+      "metrics/mAP50(B)": 0.3434746918242972,
+      "metrics/mAP50-95(B)": 0.21460720377234604,
+      "metrics/precision(B)": 0.6552554586594962,
+      "metrics/recall(B)": 0.34418269087898273
+    },
+    "name": "YOLOv8n pretrained"
+  }
+}

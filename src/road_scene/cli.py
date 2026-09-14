@@ -65,6 +65,14 @@ def _build_parser() -> argparse.ArgumentParser:
     report_parser.add_argument("--analysis", default="docs/analysis")
     report_parser.add_argument("--limit", type=int, default=9)
 
+    compare_parser = subparsers.add_parser("compare", help="Compare two evaluation metric files")
+    compare_parser.add_argument("--reference-name", default="YOLOv8n baseline")
+    compare_parser.add_argument("--reference-metrics", required=True)
+    compare_parser.add_argument("--candidate-name", default="YOLOv8n-P2")
+    compare_parser.add_argument("--candidate-metrics", required=True)
+    compare_parser.add_argument("--output-json", default="reports/model-comparison.json")
+    compare_parser.add_argument("--output-png", default="docs/analysis/model-comparison.png")
+
     return parser
 
 
@@ -153,6 +161,20 @@ def main(argv: list[str] | None = None) -> int:
             limit=args.limit,
         )
         print(json.dumps(report, indent=2, ensure_ascii=False))
+        return 0
+
+    if args.command == "compare":
+        from .compare import compare_models
+
+        comparison = compare_models(
+            reference_name=args.reference_name,
+            reference_metrics=args.reference_metrics,
+            candidate_name=args.candidate_name,
+            candidate_metrics=args.candidate_metrics,
+            output_json=args.output_json,
+            output_png=args.output_png,
+        )
+        print(json.dumps(comparison, indent=2, ensure_ascii=False))
         return 0
 
     return 2

@@ -26,6 +26,11 @@ def load_experiment_config(config_path: str | Path) -> tuple[dict[str, Any], Pat
             local_weight = project_root / "weights" / model_path
             if local_weight.exists():
                 data["model"] = str(local_weight.resolve())
+    if "pretrained_model" in data:
+        pretrained_path = Path(str(data["pretrained_model"])).expanduser()
+        if not pretrained_path.is_absolute():
+            pretrained_path = project_root / pretrained_path
+        data["pretrained_model"] = str(pretrained_path.resolve())
     if "data" in data:
         data_path = Path(str(data["data"])).expanduser()
         if not data_path.is_absolute():
@@ -64,10 +69,13 @@ def train_model(config_path: str | Path, overrides: dict[str, Any] | None = None
         if value is not None:
             config[key] = value
     model_name = config.pop("model", "yolov8n.pt")
+    pretrained_model = config.pop("pretrained_model", None)
     if "data" not in config:
         raise ValueError("Training config must define 'data'.")
 
     model = _import_yolo()(model_name)
+    if pretrained_model:
+        model.load(str(pretrained_model))
     return model.train(**config)
 
 

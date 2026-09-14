@@ -98,9 +98,14 @@ Detailed class mapping and processing steps are documented in `docs/dataset.md`.
 | mAP50-95 | 0.215 |
 
 Training and evaluation details are recorded in `docs/experiments/road-yolov8n-baseline.md`.
+## YOLOv8n-P2 Comparison
+
+![Model comparison](docs/analysis/model-comparison.png)
+
+The P2 experiment underperformed the pretrained YOLOv8n baseline in the current small-data, short CPU training setting. This negative result is documented rather than hidden. See `docs/experiments/model-comparison.md` for the controlled setup, metrics, and limitations.
 ## Status
 
-The YOLOv8n baseline is trained and evaluated. Visualization, P2 comparison, and report generation will be added in later stages.
+The baseline, visual report, and P2 comparison are complete. Final documentation and release preparation remain.
 
 ## Tech Stack
 
