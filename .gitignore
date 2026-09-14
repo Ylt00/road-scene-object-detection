@@ -39,3 +39,6 @@ weights/
 .env
 .env.*
 !.env.example
+
+# Temporary report generation
+docs/.*-temp/

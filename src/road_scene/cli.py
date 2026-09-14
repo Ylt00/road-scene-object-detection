@@ -54,6 +54,17 @@ def _build_parser() -> argparse.ArgumentParser:
     predict_parser.add_argument("--name", default="road-yolov8n-baseline")
     predict_parser.add_argument("--conf", type=float, default=0.25)
 
+    report_parser = subparsers.add_parser("report", help="Generate visual report assets")
+    report_parser.add_argument("--images", required=True)
+    report_parser.add_argument("--labels", required=True)
+    report_parser.add_argument("--predictions", required=True)
+    report_parser.add_argument("--metrics", required=True)
+    report_parser.add_argument("--results", required=True)
+    report_parser.add_argument("--plots", required=True)
+    report_parser.add_argument("--assets", default="docs/assets")
+    report_parser.add_argument("--analysis", default="docs/analysis")
+    report_parser.add_argument("--limit", type=int, default=9)
+
     return parser
 
 
@@ -125,6 +136,23 @@ def main(argv: list[str] | None = None) -> int:
             name=args.name,
             conf=args.conf,
         )
+        return 0
+
+    if args.command == "report":
+        from .visualize import build_visual_report
+
+        report = build_visual_report(
+            images_dir=args.images,
+            labels_dir=args.labels,
+            predictions_dir=args.predictions,
+            metrics_path=args.metrics,
+            results_csv=args.results,
+            plots_dir=args.plots,
+            assets_dir=args.assets,
+            analysis_dir=args.analysis,
+            limit=args.limit,
+        )
+        print(json.dumps(report, indent=2, ensure_ascii=False))
         return 0
 
     return 2

@@ -71,6 +71,23 @@ Current prepared dataset:
 | Validation errors | 0 |
 
 Detailed class mapping and processing steps are documented in `docs/dataset.md`.
+## Detection Results
+
+![Ground truth detections](docs/assets/ground-truth-grid.jpg)
+
+![YOLOv8n predictions](docs/assets/prediction-grid.jpg)
+
+![Small object examples](docs/assets/small-object-grid.jpg)
+
+## Evaluation Analysis
+
+![Overall metrics](docs/analysis/overall-metrics.png)
+
+![Training curves](docs/analysis/training-curves.png)
+
+![Confusion matrix](docs/analysis/confusion-matrix.png)
+
+![Precision recall curve](docs/analysis/precision-recall-curve.png)
 ## YOLOv8n Baseline
 
 | Metric | Value |
