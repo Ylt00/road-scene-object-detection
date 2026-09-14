@@ -51,9 +51,29 @@ Visualization and report generation
 
 The first version uses a curated road-related subset of COCO128 to validate the complete pipeline. Later versions will extend to BDD100K and custom road-animal datasets when GPU resources are available.
 
+## Dataset Preparation
+
+The first version prepares a curated road-scene subset from COCO128.
+
+Current prepared dataset:
+
+| Item | Value |
+|---|---:|
+| Source | COCO128 |
+| Total images | 128 |
+| Training images | 102 |
+| Validation images | 26 |
+| Retained objects | 389 |
+| Filtered objects | 540 |
+| Small objects | 153 |
+| Medium objects | 114 |
+| Large objects | 122 |
+| Validation errors | 0 |
+
+Detailed class mapping and processing steps are documented in `docs/dataset.md`.
 ## Status
 
-Project initialization. The repository structure, data pipeline, training, evaluation, and visualization components will be added incrementally.
+Dataset preparation is implemented and verified. Model training, evaluation, visualization, and report generation will be added in later stages.
 
 ## Tech Stack
 

@@ -1,0 +1,60 @@
+{
+  "source_archive": "coco128.zip",
+  "source_archive_size": 6983030,
+  "source_archive_sha256": "61e5e3028863d8ffc3b81d6a514603954889f0edd5e4b44c4ce60b2da99aeb8e",
+  "seed": 42,
+  "val_ratio": 0.2,
+  "splits": {
+    "train": {
+      "images": 102,
+      "objects": 295
+    },
+    "val": {
+      "images": 26,
+      "objects": 94
+    }
+  },
+  "classes": {
+    "0": "person",
+    "1": "bicycle",
+    "2": "car",
+    "3": "motorcycle",
+    "4": "bus",
+    "5": "truck",
+    "6": "traffic light",
+    "7": "stop sign",
+    "8": "cat",
+    "9": "dog",
+    "10": "horse",
+    "11": "sheep",
+    "12": "cow",
+    "13": "backpack",
+    "14": "umbrella",
+    "15": "suitcase"
+  },
+  "class_objects": {
+    "0": 254,
+    "1": 6,
+    "2": 46,
+    "3": 5,
+    "4": 7,
+    "5": 12,
+    "6": 14,
+    "7": 2,
+    "8": 4,
+    "9": 9,
+    "10": 2,
+    "11": 0,
+    "12": 0,
+    "13": 6,
+    "14": 18,
+    "15": 4
+  },
+  "filtered_objects": 540,
+  "size_distribution": {
+    "small": 153,
+    "medium": 114,
+    "large": 122
+  },
+  "errors": []
+}

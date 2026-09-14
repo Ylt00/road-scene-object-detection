@@ -1,0 +1,16 @@
+# YOLOv8n with P2 high-resolution detection head for small-object analysis.
+model: yolov8-p2.yaml
+data: data/processed/road-scene/data.yaml
+epochs: 20
+imgsz: 320
+batch: 8
+device: cpu
+workers: 0
+seed: 42
+deterministic: true
+project: runs/train
+name: road-yolov8n-p2
+exist_ok: true
+plots: false
+amp: false
+close_mosaic: 0
