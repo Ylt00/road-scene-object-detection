@@ -1,7 +1,7 @@
 # YOLOv8n with P2 high-resolution detection head for small-object analysis.
 model: yolov8-p2.yaml
 data: data/processed/road-scene/data.yaml
-epochs: 20
+epochs: 10
 imgsz: 320
 batch: 8
 device: cpu

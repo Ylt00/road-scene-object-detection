@@ -29,6 +29,31 @@ def _build_parser() -> argparse.ArgumentParser:
     validate_parser = subparsers.add_parser("validate", help="Validate a YOLO dataset")
     validate_parser.add_argument("--data", required=True)
 
+    train_parser = subparsers.add_parser("train", help="Train a YOLO model")
+    train_parser.add_argument("--config", default="configs/road-scene-cpu.yaml")
+    train_parser.add_argument("--model")
+    train_parser.add_argument("--epochs", type=int)
+    train_parser.add_argument("--imgsz", type=int)
+    train_parser.add_argument("--device")
+    train_parser.add_argument("--name")
+
+    evaluate_parser = subparsers.add_parser("evaluate", help="Evaluate YOLO weights")
+    evaluate_parser.add_argument("--weights", required=True)
+    evaluate_parser.add_argument("--data", required=True)
+    evaluate_parser.add_argument("--imgsz", type=int, default=320)
+    evaluate_parser.add_argument("--device", default="cpu")
+    evaluate_parser.add_argument("--project", default="runs/val")
+    evaluate_parser.add_argument("--name", default="road-yolov8n-baseline")
+
+    predict_parser = subparsers.add_parser("predict", help="Run YOLO inference")
+    predict_parser.add_argument("--weights", required=True)
+    predict_parser.add_argument("--source", required=True)
+    predict_parser.add_argument("--imgsz", type=int, default=320)
+    predict_parser.add_argument("--device", default="cpu")
+    predict_parser.add_argument("--project", default="runs/predict")
+    predict_parser.add_argument("--name", default="road-yolov8n-baseline")
+    predict_parser.add_argument("--conf", type=float, default=0.25)
+
     return parser
 
 
@@ -58,6 +83,49 @@ def main(argv: list[str] | None = None) -> int:
         report = validate_yolo_dataset(args.data)
         print(json.dumps(report.as_dict(), indent=2, ensure_ascii=False))
         return 0 if report.is_valid else 1
+
+    if args.command == "train":
+        from .train import train_model
+
+        train_model(
+            args.config,
+            overrides={
+                "model": args.model,
+                "epochs": args.epochs,
+                "imgsz": args.imgsz,
+                "device": args.device,
+                "name": args.name,
+            },
+        )
+        return 0
+
+    if args.command == "evaluate":
+        from .train import evaluate_model
+
+        _, metrics_path = evaluate_model(
+            weights=args.weights,
+            data=args.data,
+            imgsz=args.imgsz,
+            device=args.device,
+            project=args.project,
+            name=args.name,
+        )
+        print(f"Metrics saved to: {metrics_path}")
+        return 0
+
+    if args.command == "predict":
+        from .train import predict_model
+
+        predict_model(
+            weights=args.weights,
+            source=args.source,
+            imgsz=args.imgsz,
+            device=args.device,
+            project=args.project,
+            name=args.name,
+            conf=args.conf,
+        )
+        return 0
 
     return 2
 
