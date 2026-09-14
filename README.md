@@ -1,76 +1,20 @@
 # Road Scene Object Detection
 
-面向智能驾驶和车载视觉的多类别道路场景目标检测项目。
+[![CI](https://github.com/Ylt00/road-scene-object-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/Ylt00/road-scene-object-detection/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.12-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Project Goals
+Multi-class road scene object detection for intelligent driving and automotive vision. The project covers data preparation, YOLOv8n training, evaluation, prediction, visual reporting, model comparison, and automated testing.
 
-- 检测车辆、行人、交通设施、小动物和其他道路物体
-- 分析小目标的检测性能和漏检原因
-- 生成检测结果图和指标分析图
-- 对比 YOLOv8n、YOLOv8n-P2 等模型
-- 通过 GitHub Actions 自动测试
-- 提供可复现的数据、训练和评估流程
+## Project Highlights
 
-## Target Classes
+- Curates 16 road-related classes from COCO128
+- Trains and evaluates a YOLOv8n baseline
+- Generates detection grids, metric charts, confusion matrices, and PR curves
+- Compares YOLOv8n with a P2 high-resolution detection-head experiment
+- Documents a negative P2 result instead of selecting only favorable metrics
+- Provides an installable CLI and GitHub Actions CI
 
-- Vehicles: car, bus, truck, motorcycle, bicycle
-- Road users: person
-- Traffic facilities: traffic light, stop sign
-- Animals: dog, cat, bird, horse, cow, sheep
-- Other objects: backpack, umbrella, suitcase
-
-## Planned Pipeline
-
-Dataset preparation
-
-Class filtering and remapping
-
-Dataset validation
-
-YOLOv8n baseline training
-
-YOLOv8n-P2 small-object experiment
-
-Evaluation and error analysis
-
-Visualization and report generation
-
-## Planned Analysis
-
-- Precision, Recall, mAP50, mAP50-95
-- Per-class detection performance
-- AP_small, AP_medium, AP_large
-- Confusion matrix
-- Precision-recall curves
-- Training and validation loss curves
-- Confidence distribution
-- Small-object miss detection cases
-- Model size, FLOPs, and inference latency
-
-## Dataset Plan
-
-The first version uses a curated road-related subset of COCO128 to validate the complete pipeline. Later versions will extend to BDD100K and custom road-animal datasets when GPU resources are available.
-
-## Dataset Preparation
-
-The first version prepares a curated road-scene subset from COCO128.
-
-Current prepared dataset:
-
-| Item | Value |
-|---|---:|
-| Source | COCO128 |
-| Total images | 128 |
-| Training images | 102 |
-| Validation images | 26 |
-| Retained objects | 389 |
-| Filtered objects | 540 |
-| Small objects | 153 |
-| Medium objects | 114 |
-| Large objects | 122 |
-| Validation errors | 0 |
-
-Detailed class mapping and processing steps are documented in `docs/dataset.md`.
 ## Detection Results
 
 ![Ground truth detections](docs/assets/ground-truth-grid.jpg)
@@ -88,31 +32,102 @@ Detailed class mapping and processing steps are documented in `docs/dataset.md`.
 ![Confusion matrix](docs/analysis/confusion-matrix.png)
 
 ![Precision recall curve](docs/analysis/precision-recall-curve.png)
-## YOLOv8n Baseline
 
-| Metric | Value |
+## Model Results
+
+| Model | Precision | Recall | mAP50 | mAP50-95 | Params | GFLOPs |
+|---|---:|---:|---:|---:|---:|---:|
+| YOLOv8n pretrained | 0.655 | 0.344 | 0.343 | 0.215 | 3,008,768 | 8.1 |
+| YOLOv8n-P2 | 0.746 | 0.010 | 0.010 | 0.003 | 2,923,152 | 12.2 |
+
+The P2 experiment underperformed in the current small-data, short CPU-training setting. The controlled setup, reasons, and limitations are documented in `docs/experiments/model-comparison.md`.
+
+## Quick Start
+
+Install the package:
+
+```powershell
+python -m pip install -e ".[train]"
+```
+
+Prepare the road-scene dataset:
+
+```powershell
+python -m road_scene.cli prepare-data --archive data/downloads/coco128.zip --raw data/raw --output data/processed/road-scene --report reports/road-dataset-stats.json --force
+python -m road_scene.cli validate --data data/processed/road-scene/data.yaml
+```
+
+Train the baseline:
+
+```powershell
+python -m road_scene.cli train --config configs/road-scene-cpu.yaml
+```
+
+Evaluate:
+
+```powershell
+python -m road_scene.cli evaluate --weights runs/train/road-yolov8n-baseline/weights/best.pt --data data/processed/road-scene/data.yaml --imgsz 320 --device cpu
+```
+
+Predict:
+
+```powershell
+python -m road_scene.cli predict --weights runs/train/road-yolov8n-baseline/weights/best.pt --source data/processed/road-scene/images/val --imgsz 320 --device cpu
+```
+
+Generate the visual report:
+
+```powershell
+python -m road_scene.cli report --images data/processed/road-scene/images/val --labels data/processed/road-scene/labels/val --predictions runs/predict/road-yolov8n-baseline --metrics runs/val/road-yolov8n-baseline/metrics.json --results runs/train/road-yolov8n-baseline/results.csv --plots runs/val/road-yolov8n-baseline
+```
+
+## Dataset
+
+| Item | Value |
 |---|---:|
-| Precision | 0.655 |
-| Recall | 0.344 |
-| mAP50 | 0.343 |
-| mAP50-95 | 0.215 |
+| Source | COCO128 |
+| Total images | 128 |
+| Training images | 102 |
+| Validation images | 26 |
+| Retained objects | 389 |
+| Filtered objects | 540 |
+| Classes | 16 |
+| Validation errors | 0 |
 
-Training and evaluation details are recorded in `docs/experiments/road-yolov8n-baseline.md`.
-## YOLOv8n-P2 Comparison
+Selected classes include vehicles, pedestrians, traffic facilities, animals, and carried objects. See `docs/dataset.md` for the complete mapping.
 
-![Model comparison](docs/analysis/model-comparison.png)
+## Repository Structure
 
-The P2 experiment underperformed the pretrained YOLOv8n baseline in the current small-data, short CPU training setting. This negative result is documented rather than hidden. See `docs/experiments/model-comparison.md` for the controlled setup, metrics, and limitations.
-## Status
+```text
+road-scene-object-detection/
+├─ configs/                  # YOLOv8n and P2 experiment configs
+├─ docs/
+│  ├─ analysis/              # Metric charts and comparison plots
+│  ├─ assets/                # Detection result grids
+│  ├─ experiments/           # Experiment records
+│  ├─ dataset.md
+│  └─ training.md
+├─ reports/                  # JSON metrics and dataset statistics
+├─ src/road_scene/           # Python package and CLI
+├─ tests/                    # Unit tests
+└─ .github/workflows/ci.yml  # Python 3.10 and 3.12 CI
+```
 
-The baseline, visual report, and P2 comparison are complete. Final documentation and release preparation remain.
+## Resume Highlights
 
-## Tech Stack
+- Built a road-scene object detection pipeline covering data filtering, class remapping, validation, YOLOv8n training, mAP evaluation, prediction, and report generation.
+- Added a P2 high-resolution detection-head experiment and documented its negative result with controlled variables and failure analysis.
+- Developed a CLI and image-report toolkit using PyTorch, Ultralytics, OpenCV, NumPy, and Matplotlib.
+- Added unit tests and GitHub Actions CI across Python 3.10 and 3.12.
 
-- Python
-- PyTorch
-- Ultralytics YOLO
-- OpenCV
-- NumPy
-- Matplotlib
-- Git and GitHub Actions
+## Limitations
+
+- COCO128 is a small demonstration subset, not a production autonomous-driving dataset.
+- Several classes contain very few examples, so per-class metrics are unstable.
+- CPU training is limited to 10 epochs.
+- The P2 model requires more data and longer training before its small-object behavior can be evaluated fairly.
+- The project is for engineering and research learning, not real-world driving deployment.
+
+## License
+
+MIT
